@@ -1,0 +1,20 @@
+Initial point of search.
+  Reporting Time = 1.25.
+  Maximum Evaluation Fraction = 0.3.
+  Minimum Desired Reports to Date = 100.
+  Increase in DRD per Doubling of Eligibility = 700.
+  Minimum Eligibility Fraction = 0.016.
+Simulations = 1.
+Pass = 0.
+Payoff = -880121.
+---------------------------------.
+Maximum payoff found at:.
+  Reporting Time = 1.27341.
+  Maximum Evaluation Fraction = 0.170186.
+  Minimum Desired Reports to Date = 115.599.
+  Increase in DRD per Doubling of Eligibility = 653.707.
+ *Minimum Eligibility Fraction = 0.0159285.
+Simulations = 366.
+Pass = 3.
+Payoff = -92160.5.
+---------------------------------.
