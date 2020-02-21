@@ -1,0 +1,434 @@
+{UTF-8}
+"Correction to Orders from Supply Line (CSL)"=
+	("Desired Supply Line (DSL)"-"Supply Line of Unfilled Orders for Capital (SL)")/"Time to Adjust Supply Line (TASL)"
+	~	capital/Year
+	~		|
+
+"Order Rate (OR)"=
+	1000*(("SW - Switch for Jump in Orders")*(1.05)+(1-"SW - Switch for Jump in Orders")\
+		)
+	~	units/Year
+	~		|
+
+"Delivery Delay (DD)"=
+	"Backlog of Unfilled Orders (B)"/"Production Rate (PR)"
+	~	Year
+	~		|
+
+"Initial Backlog (B to)"=
+	1500
+	~	
+	~		|
+
+"SW - Switch for Jump in Orders"=
+	1
+	~	Dmnl [0,1,1]
+	~		|
+
+"Average lifetime of capital (ALC)"=
+	20
+	~	Year
+	~		|
+
+"Backlog of Unfilled Orders (B)"= INTEG (
+	Increase in Backlog-"Production Rate (PR)",
+		"Initial Backlog (B to)")
+	~	units
+	~		|
+
+"Capacity Utilization (CU)"=
+	"TB - Capacity Utilization vs IP/PC"("Inidicated Production (IP)"/"Production Capacity (PC)"\
+		)
+	~	Dmnl
+	~		|
+
+"Capital / Output Ratio (COR)"=
+	3
+	~	capital*Year/units
+	~		|
+
+"Capital Acquisitions (CA)"=
+	"Supply Line of Unfilled Orders for Capital (SL)"/"Capital Acquistion Time (CAT)"
+	~	capital/Year
+	~		|
+
+"Capital Acquistion Time (CAT)"=
+	"Normal Delivery Delay (NDD)"
+	~	Year
+	~		|
+
+"Capital Discards (CD)"=
+	"Capital Stock (C)"/"Average lifetime of capital (ALC)"
+	~	capital/Year
+	~		|
+
+"Capital Order Fraction (COF)"=
+	"TB - COF vs ICOF"("Indicated Capital Order Fraction (ICOF)")
+	~	Dmnl/Year
+	~		|
+
+"Capital Orders (CO)"=
+	"Capital Order Fraction (COF)"*"Capital Stock (C)"
+	~	capital/Year
+	~		|
+
+"Capital Stock (C)"= INTEG (
+	"Capital Acquisitions (CA)"-"Capital Discards (CD)",
+		"Inital Capital Stock (C to)")
+	~	capital
+	~		|
+
+Change in Expected Orders=
+	("Order Rate (OR)"-"Expected Orders (EO)")/"Time to Average Orders (TAO)"
+	~	units/Year/Year
+	~		|
+
+"Correction from Backlog (CB)"=
+	("Backlog of Unfilled Orders (B)"-Indicated Backlog)/"Time to Adjust Backlog (TAB)"
+	~	units/Year
+	~		|
+
+"Correction to Orders from Captial Stock (CC)"=
+	("Desired Captial (DC)"-"Capital Stock (C)")/"Time to Adjust Captial (TAC)"
+	~	capital/Year
+	~		|
+
+"Desired Captial (DC)"=
+	"Reference Captial (RC)"*"TB - DC vs IC/RC"("Indicated Capital (IC)"/"Reference Captial (RC)"\
+		)
+	~	capital
+	~		|
+
+"Desired Supply Line (DSL)"=
+	"Capital Discards (CD)"*"Perceived Capital Acquistion Time (PCAT)"
+	~	capital
+	~		|
+
+"Expected Orders (EO)"= INTEG (
+	Change in Expected Orders,
+		"Initial Expected Orders (EO to)")
+	~	units/Year
+	~		|
+
+Increase in Backlog=
+	"Order Rate (OR)"
+	~	units/Year
+	~		|
+
+Indicated Backlog=
+	"Normal Delivery Delay (NDD)"*"Expected Orders (EO)"
+	~	units
+	~		|
+
+"Indicated Capital (IC)"=
+	"Capital / Output Ratio (COR)"*"Indicated Production Capacity (IPC)"
+	~	capital
+	~		|
+
+"Indicated Capital Order Fraction (ICOF)"=
+	("Capital Discards (CD)"+"Correction to Orders from Captial Stock (CC)"+"Correction to Orders from Supply Line (CSL)"\
+		)/"Capital Stock (C)"
+	~	Dmnl/Year
+	~		|
+
+"Indicated Production Capacity (IPC)"=
+	"Correction from Backlog (CB)"+"Expected Orders (EO)"
+	~	units/Year
+	~		|
+
+"Inidicated Production (IP)"=
+	"Backlog of Unfilled Orders (B)"/"Normal Delivery Delay (NDD)"
+	~	units/Year
+	~		|
+
+"Inital Capital Stock (C to)"=
+	3000
+	~	capital
+	~		|
+
+"Inital Supply Line of Unfilled Orders for Capital (SL to)"=
+	225
+	~	capital
+	~		|
+
+"Initial Expected Orders (EO to)"=
+	1000
+	~	units/Year
+	~		|
+
+"Normal Delivery Delay (NDD)"=
+	1.5
+	~	Year
+	~		|
+
+"Perceived Capital Acquistion Time (PCAT)"=
+	"Capital Acquistion Time (CAT)"
+	~	Year
+	~		|
+
+"Production Capacity (PC)"=
+	"Capital Stock (C)"/"Capital / Output Ratio (COR)"
+	~	units/Year
+	~		|
+
+Production Rate=
+	"Production Capacity (PC)"*"Capacity Utilization (CU)"
+	~	units/Year
+	~		|
+
+"Production Rate (PR)"=
+	"Production Capacity (PC)"*"Capacity Utilization (CU)"
+	~	units/Year
+	~		|
+
+"Reference Captial (RC)"=
+	"Production Rate (PR)"*"Capital / Output Ratio (COR)"
+	~	capital
+	~	See footnote 4
+	|
+
+"Supply Line of Unfilled Orders for Capital (SL)"= INTEG (
+	"Capital Orders (CO)"-"Capital Acquisitions (CA)",
+		"Inital Supply Line of Unfilled Orders for Capital (SL to)")
+	~	capital
+	~		|
+
+"TB - Capacity Utilization vs IP/PC"(
+	[(0,0)-(2,1.2)],(0,0),(0.2,0.3),(0.4,0.55),(0.6,0.75),(0.8,0.9),(1,1),(1.2,1),(1.4,1\
+		),(1.6,1),(2,1))
+	~	Dmnl
+	~		|
+
+"TB - COF vs ICOF"(
+	[(-0.2,0)-(0.4,0.5)],(-0.1,0),(-0.05,0),(0,0.02),(0.05,0.05),(0.1,0.1),(0.15,0.15),(\
+		0.2,0.2),(0.25,0.25),(0.3,0.28),(0.35,0.3),(0.4,0.3))
+	~	Dmnl/Year
+	~		|
+
+"TB - DC vs IC/RC"(
+	[(-0.5,0)-(10,6)],(-0.5,0),(0,0),(0.5,0.5),(1,1),(1.5,1.5),(2,2),(2.5,2.5),(3,3),(3.5\
+		,3.5),(4,4),(4.5,4.5),(5,5),(5.5,5.4),(6,5.7),(6.5,5.9),(7,6),(7.5,6))
+	~	Dmnl
+	~		|
+
+"Time to Adjust Backlog (TAB)"=
+	1.5
+	~	Year
+	~		|
+
+"Time to Adjust Captial (TAC)"=
+	3
+	~	Year
+	~		|
+
+"Time to Adjust Supply Line (TASL)"=
+	3
+	~	Year
+	~		|
+
+"Time to Average Orders (TAO)"=
+	2
+	~	Year
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 36
+	~	Year
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Year
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP 
+	~	Year [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0625
+	~	Year [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Arial|12||0-0-0|0-0-0|0-0-0|-1--1--1|-1--1--1|96,96,80,0
+10,1,"Production Capacity (PC)",845,983,53,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,2,"Capacity Utilization (CU)",936,861,55,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,"Backlog of Unfilled Orders (B)",526,777,61,30,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,4,"Normal Delivery Delay (NDD)",735,597,58,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,5,"Inidicated Production (IP)",726,720,55,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,6,3,5,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(621,737)|
+1,7,4,5,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(747,651)|
+10,8,"TB - Capacity Utilization vs IP/PC",1166,773,69,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,9,8,2,1,0,0,0,0,128,0,-1--1--1,,1|(981,752)|
+1,10,1,2,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(904,947)|
+1,11,5,2,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(771,738)|
+10,12,"Capital Stock (C)",1342,514,40,20,3,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,13,14,12,4,0,0,22,0,0,0,-1--1--1,,1|(1265,516)|
+11,14,750,1222,516,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,15,"Capital Acquisitions (CA)",1222,542,65,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,16,48,1535,513,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,17,19,16,4,0,0,22,0,0,0,-1--1--1,,1|(1492,513)|
+1,18,19,12,100,0,0,22,0,0,0,-1--1--1,,1|(1414,513)|
+11,19,48,1453,513,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,20,"Capital Discards (CD)",1453,539,54,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,21,"Inital Capital Stock (C to)",1280,643,45,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,22,21,12,1,0,0,0,0,128,1,-1--1--1,,1|(1306,585)|
+10,23,"Capital / Output Ratio (COR)",456,1003,57,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,24,23,1,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(710,1032)|
+1,25,12,1,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1339,647)|
+10,26,"Average lifetime of capital (ALC)",1526,636,69,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,27,26,20,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(1467,611)|
+1,28,12,20,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(1387,579)|
+12,29,0,1785,603,77,27,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+Is first order discards ok? Equal prob of discard? Hmm
+10,30,"Capital Acquistion Time (CAT)",1011,670,67,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,31,"Supply Line of Unfilled Orders for Capital (SL)",1000,520,81,36,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,32,31,15,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1114,586)|
+1,33,30,15,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(1181,592)|
+12,34,48,695,524,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,35,37,31,4,0,0,22,0,0,0,-1--1--1,,1|(871,525)|
+1,36,37,34,100,0,0,22,0,0,0,-1--1--1,,1|(758,525)|
+11,37,48,818,525,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,38,"Capital Orders (CO)",818,551,54,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,39,"Inital Supply Line of Unfilled Orders for Capital (SL to)",1073,430,70,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,40,39,31,1,0,0,0,0,128,1,-1--1--1,,1|(1046,472)|
+1,41,14,31,100,0,0,22,0,0,0,-1--1--1,,1|(1148,516)|
+10,42,"Capital Order Fraction (COF)",1019,306,56,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,43,42,37,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(842,388)|
+1,44,12,37,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(1176,384)|
+10,45,"Indicated Capital Order Fraction (ICOF)",1039,188,80,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,46,"Correction to Orders from Captial Stock (CC)",942,75,75,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,47,"Correction to Orders from Supply Line (CSL)",1269,176,75,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,48,46,45,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(994,158)|
+1,49,47,45,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1152,165)|
+1,50,19,45,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1228,275)|
+1,51,12,45,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1275,412)|
+10,52,"TB - COF vs ICOF",859,218,46,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,53,52,42,1,0,0,0,0,128,0,-1--1--1,,1|(964,279)|
+1,54,45,42,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(999,255)|
+10,55,"Desired Supply Line (DSL)",1432,87,57,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,56,"Time to Adjust Supply Line (TASL)",1444,171,71,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,57,55,47,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1340,110)|
+1,58,56,47,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1352,199)|
+10,59,"Perceived Capital Acquistion Time (PCAT)",1297,-14,66,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,60,"Capital Acquistion Time (CAT)",1122,-51,59,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,61,60,59,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1245,-49)|
+10,62,"Capital Discards (CD)",1456,-15,58,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,63,59,55,1,0,0,0,2,192,0,-1--1--1,|12||0-0-0,1|(1364,36)|
+1,64,62,55,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1470,35)|
+10,65,"Desired Captial (DC)",761,-1,47,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,66,"Capital Stock (C)",896,-35,55,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,67,65,46,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(811,33)|
+1,68,66,46,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(942,26)|
+10,69,"Time to Adjust Captial (TAC)",744,205,53,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,70,69,46,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(832,111)|
+10,71,"Reference Captial (RC)",595,-53,46,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,72,"Indicated Capital (IC)",588,109,42,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,73,"Indicated Production Capacity (IPC)",591,256,54,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,74,"Capital / Output Ratio (COR)",367,54,61,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,75,74,72,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(463,96)|
+1,76,73,72,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(615,203)|
+10,77,"TB - DC vs IC/RC",520,32,41,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,78,71,65,1,0,0,0,0,128,0,-1--1--1,,1|(687,-45)|
+1,79,77,65,1,0,0,0,0,128,0,-1--1--1,,1|(596,5)|
+1,80,72,65,1,0,0,0,0,128,0,-1--1--1,,1|(651,57)|
+10,81,"Expected Orders (EO)",316,332,49,28,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,82,"Correction from Backlog (CB)",467,384,57,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,83,82,73,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(503,310)|
+1,84,81,73,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(402,272)|
+10,85,Indicated Backlog,325,524,34,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,86,85,82,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(384,484)|
+1,87,3,82,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(464,605)|
+1,88,4,85,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(525,559)|
+1,89,81,85,1,0,0,0,0,64,0,-1--1--1,,1|(297,426)|
+12,90,48,94,325,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,91,93,81,4,0,0,22,0,0,0,-1--1--1,,1|(229,325)|
+1,92,93,90,68,0,0,22,2,0,0,-1--1--1,|12||0-0-0,1|(141,325)|
+11,93,48,185,325,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,94,Change in Expected Orders,185,351,62,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,95,"Time to Average Orders (TAO)",116,226,61,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,96,95,93,1,0,45,0,2,128,0,-1--1--1,|12||0-0-0,1|(131,270)|
+10,97,"Initial Expected Orders (EO to)",316,169,56,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,98,97,81,1,0,43,0,2,192,1,-1--1--1,|12||0-0-0,1|(312,252)|
+1,99,81,93,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(265,267)|
+10,100,"Order Rate (OR)",113,575,59,10,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,101,100,94,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(116,499)|
+12,102,48,321,770,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,103,105,3,4,0,0,22,0,0,0,-1--1--1,,1|(434,770)|
+1,104,105,102,100,0,0,22,0,0,0,-1--1--1,,1|(361,770)|
+11,105,48,398,770,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,106,Increase in Backlog,398,796,40,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,107,100,106,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(138,661)|
+10,108,"Initial Backlog (B to)",577,657,51,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,109,108,3,1,0,43,0,2,192,1,-1--1--1,|12||0-0-0,1|(571,698)|
+12,110,48,713,774,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,111,113,110,4,0,0,22,0,0,0,-1--1--1,,1|(677,774)|
+1,112,113,3,100,0,0,22,0,0,0,-1--1--1,,1|(613,774)|
+11,113,48,645,774,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,114,"Production Rate (PR)",645,800,40,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,115,2,114,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(801,817)|
+1,116,1,114,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(671,917)|
+1,117,4,30,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(830,617)|
+10,118,"Time to Adjust Backlog (TAB)",645,430,54,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,119,118,82,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(545,432)|
+10,120,"Production Rate (PR)",425,-103,45,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,121,120,71,1,0,0,0,0,128,0,-1--1--1,,1|(545,-108)|
+1,122,74,71,1,0,0,0,0,128,0,-1--1--1,,1|(452,-31)|
+12,123,0,1877,192,304,163,3,188,0,0,1,0,0,0,0,0,0,0,0,0
+Orders_and_Production
+12,124,0,1866,863,286,178,3,188,0,0,2,0,0,0,0,0,0,0,0,0
+"Backlog of Unfilled Orders (B)",Graph
+10,125,"Delivery Delay (DD)",498,932,53,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,126,3,125,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(496,845)|
+1,127,114,125,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(585,884)|
+10,128,"SW - Switch for Jump in Orders",186,517,57,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,129,128,100,1,0,0,0,0,128,0,-1--1--1,,1|(172,554)|
+1,130,31,47,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1212,453)|
+///---\\\
+:GRAPH Orders_and_Production
+:TITLE Orders and Production
+:SCALE
+:VAR "Order Rate (OR)"
+:VAR "Expected Orders (EO)"
+:VAR "Production Rate (PR)"
+:L<%^E!@
+1:Sterman_Economic_Wave.vdfx
+9:Sterman_Economic_Wave
+15:0,0,0,0,0,0
+19:80,0
+27:0,
+34:0,
+4:Time
+5:SW - Switch for Jump in Orders
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:0
+41:0
+42:1
+72:0
+73:0
+76:0
+77:0
+78:0
+79:0
+80:0
+81:0
+24:0
+25:36
+26:36
+75:
+43:

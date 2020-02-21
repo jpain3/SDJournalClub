@@ -1,0 +1,604 @@
+{UTF-8}
+"Delivery Delay (DD)"= ACTIVE INITIAL (
+	"Backlog of Unfilled Orders (B)"/"Production Rate (PR)",
+		"Normal Delivery Delay (NDD)")
+	~	Year
+	~		|
+
+"Backlog of Unfilled Orders (B)"=
+	"Goods Sector Supply Line of Unfilled Orders (GSL)"+"KSSO - Captial Sector Switch for Self Ordering"\
+		*"Supply Line of Unfilled Orders for Capital (SL)"
+	~	units
+	~		|
+
+"Inital Capital Stock (C to)"=
+	(1-"KSSO - Captial Sector Switch for Self Ordering")*"Goods Sector Capital Order Rate (GCO)"\
+		*"Capital / Output Ratio (COR)"
+	+"KSSO - Captial Sector Switch for Self Ordering"*"Goods Sector Capital Order Rate (GCO)"\
+		*"Capital / Output Ratio (COR)"*"Average lifetime of capital (ALC)"/("Average lifetime of capital (ALC)"\
+		-"Capital / Output Ratio (COR)")
+	~	units
+	~		|
+
+"Reference Captial (RC)"= ACTIVE INITIAL (
+	"Production Rate (PR)"*"Capital / Output Ratio (COR)",
+		"Capital Stock (C)")
+	~	units
+	~	See footnote 4
+	|
+
+"Exogenous Desired Capital (KXDC)"=
+	"Reference Captial (RC)"*(1+STEP("Goods Sector Fractional Increase In Capital Orders (GFICO)"\
+		,Time of Step))
+	~	units
+	~		|
+
+"Capital Acquistion Time (CAT)"=
+	"KSSO - Captial Sector Switch for Self Ordering"*"Normal Delivery Delay (NDD)"+(1-"KSSO - Captial Sector Switch for Self Ordering"\
+		)*"Normal Delivery Delay (NDD)"
+	~	Year
+	~		|
+
+Good Sector Reference Captial Orders=
+	1e+12
+	~	
+	~		|
+
+"Goods Sector Capital Acquisition Rate (GCA)"=
+	"KSCA - Captial Sector Switch for Capital Aquistions"*"Goods Sector Supply Line of Unfilled Orders (GSL)"\
+		/"Capital Acquistion Time (CAT)"
+	+(1-"KSCA - Captial Sector Switch for Capital Aquistions")*("Production Rate (PR)"-"Capital Acquisitions (CA)"\
+		)
+	~	units/Year
+	~		|
+
+"Goods Sector Capital Aquistion Time (GCAT)"=
+	"Delivery Delay (DD)"
+	~	Year
+	~		|
+
+"Goods Sector Capital Order Rate (GCO)"=
+	Good Sector Reference Captial Orders+SW for order pulse*STEP(Good Sector Reference Captial Orders\
+		*"Goods Sector Fractional Increase In Capital Orders (GFICO)",Time of Step)
+	~	units/Year
+	~		|
+
+Time of Step=
+	10
+	~	Year
+	~		|
+
+"Order Rate (OR)"=
+	"Goods Sector Capital Order Rate (GCO)"+"KSSO - Captial Sector Switch for Self Ordering"\
+		*"Capital Orders (CO)"
+	~	units/Year
+	~		|
+
+Initial Goods Sector Supply Line=
+	"Goods Sector Capital Aquistion Time (GCAT)"*"Goods Sector Capital Order Rate (GCO)"
+	~	units
+	~		|
+
+"KSDC - Captial Sector Switch for Desired Captial"=
+	1
+	~	Dmnl [0,1,1]
+	~		|
+
+"Inital Supply Line of Unfilled Orders for Capital (SL to)"=
+	"Capital Discards (CD)"*"Capital Acquistion Time (CAT)"
+	~	units
+	~		|
+
+"Initial Expected Orders (EO to)"=
+	"Production Capacity (PC)"
+	~	units/Year
+	~		|
+
+"Effect of Delivery Delay on Supply Line (KEDDSL)"=
+	"TB - KEDDSL vs KTPCAT"("Capital Acquistion Time (CAT)"/"Normal Capital Aquistion time (KNCAT)"\
+		)
+	~	Dmnl
+	~		|
+
+"Perceived Capital Acquistion Time (PCAT)"=
+	"Normal Capital Aquistion time (KNCAT)"*"Effect of Delivery Delay on Supply Line (KEDDSL)"
+	~	Year
+	~		|
+
+"TB - KEDDSL vs KTPCAT"(
+	[(0,0)-(10,10)],(0,0),(0.5,0.5),(1,1),(1.5,1.5),(2,2),(2.5,2.5),(3,3))
+	~	Dmnl
+	~		|
+
+"KSSO - Captial Sector Switch for Self Ordering"=
+	1
+	~	 [0,1,1]
+	~		|
+
+"Normal Capital Aquistion time (KNCAT)"=
+	"Normal Delivery Delay (NDD)"
+	~	Year
+	~		|
+
+"Indicated Capital (IC)"=
+	"KSDC - Captial Sector Switch for Desired Captial"*"Capital / Output Ratio (COR)"*"Indicated Production Capacity (IPC)"
+	+(1-"KSDC - Captial Sector Switch for Desired Captial")*"Exogenous Desired Capital (KXDC)"
+	~	units
+	~		|
+
+"KSCA - Captial Sector Switch for Capital Aquistions"=
+	1
+	~	Dmnl [0,1,1]
+	~		|
+
+"Goods Sector Supply Line of Unfilled Orders (GSL)"= INTEG (
+	"Goods Sector Capital Order Rate (GCO)"-"Goods Sector Capital Acquisition Rate (GCA)"\
+		,
+		Initial Goods Sector Supply Line)
+	~	units
+	~		|
+
+"Goods Sector Fractional Increase In Capital Orders (GFICO)"=
+	0.05
+	~	Dmnl
+	~		|
+
+"Capital Acquisitions (CA)"=
+	"KSCA - Captial Sector Switch for Capital Aquistions"*"Supply Line of Unfilled Orders for Capital (SL)"\
+		/"Capital Acquistion Time (CAT)"
+	+(1-"KSCA - Captial Sector Switch for Capital Aquistions")*"Supply Line of Unfilled Orders for Capital (SL)"\
+		/"Normal Delivery Delay (NDD)"
+	~	units/Year
+	~		|
+
+"KSPR - Captial Sector Switch for Production"=
+	1
+	~	Dmnl [0,1,1]
+	~		|
+
+SW for order pulse=
+	1
+	~	Dmnl [0,1]
+	~		|
+
+"Correction to Orders from Supply Line (CSL)"=
+	("Desired Supply Line (DSL)"-"Supply Line of Unfilled Orders for Capital (SL)")/"Time to Adjust Supply Line (TASL)"
+	~	units/Year
+	~		|
+
+"Production Rate (PR)"= ACTIVE INITIAL (
+	"KSPR - Captial Sector Switch for Production"*"Production Capacity (PC)"*"Capacity Utilization (CU)"\
+		+(1-"KSPR - Captial Sector Switch for Production")*"Indicated Production Capacity (IPC)"\
+		,
+		"Production Capacity (PC)")
+	~	units/Year
+	~		|
+
+"Average lifetime of capital (ALC)"=
+	20
+	~	Year
+	~		|
+
+"Capacity Utilization (CU)"=
+	"TB - Capacity Utilization vs IP/PC"("Inidicated Production (IP)"/"Production Capacity (PC)"\
+		)
+	~	Dmnl
+	~		|
+
+"Capital / Output Ratio (COR)"=
+	5.62
+	~	units*Year/units
+	~	Default in original paper was 3. Set to 5.62 to get undamped oscillations
+	|
+
+"Capital Discards (CD)"=
+	"Capital Stock (C)"/"Average lifetime of capital (ALC)"
+	~	units/Year
+	~		|
+
+"Capital Order Fraction (COF)"=
+	"TB - COF vs ICOF"("Indicated Capital Order Fraction (ICOF)")
+	~	Dmnl/Year
+	~		|
+
+"Capital Orders (CO)"=
+	"Capital Order Fraction (COF)"*"Capital Stock (C)"
+	~	units/Year
+	~		|
+
+"Capital Stock (C)"= INTEG (
+	"Capital Acquisitions (CA)"-"Capital Discards (CD)",
+		"Inital Capital Stock (C to)")
+	~	units
+	~		|
+
+Change in Expected Orders=
+	("Order Rate (OR)"-"Expected Orders (EO)")/"Time to Average Orders (TAO)"
+	~	units/Year/Year
+	~		|
+
+"Correction from Backlog (CB)"=
+	("Backlog of Unfilled Orders (B)"-"Indicated Backlog (IB)")/"Time to Adjust Backlog (TAB)"
+	~	units/Year
+	~		|
+
+"Correction to Orders from Captial Stock (CC)"=
+	("Desired Captial (DC)"-"Capital Stock (C)")/"Time to Adjust Captial (TAC)"
+	~	units/Year
+	~		|
+
+"Desired Captial (DC)"=
+	"Reference Captial (RC)"*"TB - DC vs IC/RC"("Indicated Capital (IC)"/"Reference Captial (RC)"\
+		)
+	~	units
+	~		|
+
+"Desired Supply Line (DSL)"=
+	"Capital Discards (CD)"*"Perceived Capital Acquistion Time (PCAT)"
+	~	units
+	~		|
+
+"Expected Orders (EO)"= INTEG (
+	Change in Expected Orders,
+		"Initial Expected Orders (EO to)")
+	~	units/Year
+	~		|
+
+"Indicated Backlog (IB)"=
+	"Normal Delivery Delay (NDD)"*"Expected Orders (EO)"
+	~	units
+	~		|
+
+"Indicated Capital Order Fraction (ICOF)"=
+	("Capital Discards (CD)"+"Correction to Orders from Captial Stock (CC)"+"Correction to Orders from Supply Line (CSL)"\
+		)/"Capital Stock (C)"
+	~	Dmnl/Year
+	~		|
+
+"Indicated Production Capacity (IPC)"=
+	"Correction from Backlog (CB)"+"Expected Orders (EO)"
+	~	units/Year
+	~		|
+
+"Inidicated Production (IP)"=
+	"Backlog of Unfilled Orders (B)"/"Normal Delivery Delay (NDD)"
+	~	units/Year
+	~		|
+
+"Normal Delivery Delay (NDD)"=
+	1.5
+	~	Year
+	~		|
+
+"Production Capacity (PC)"=
+	"Capital Stock (C)"/"Capital / Output Ratio (COR)"
+	~	units/Year
+	~		|
+
+Production Rate=
+	"Production Capacity (PC)"*"Capacity Utilization (CU)"
+	~	units/Year
+	~		|
+
+"Supply Line of Unfilled Orders for Capital (SL)"= INTEG (
+	"Capital Orders (CO)"-"Capital Acquisitions (CA)",
+		"Inital Supply Line of Unfilled Orders for Capital (SL to)")
+	~	units
+	~		|
+
+"TB - Capacity Utilization vs IP/PC"(
+	[(0,0)-(2,1.2)],(0,0),(0.2,0.3),(0.4,0.55),(0.6,0.75),(0.8,0.9),(1,1),(1.2,1),(1.4,1\
+		),(1.6,1),(2,1))
+	~	Dmnl
+	~		|
+
+"TB - COF vs ICOF"(
+	[(-0.2,0)-(0.4,0.5)],(-0.1,0),(-0.05,0),(0,0.02),(0.05,0.05),(0.1,0.1),(0.15,0.15),(\
+		0.2,0.2),(0.25,0.25),(0.3,0.28),(0.35,0.3),(0.4,0.3))
+	~	Dmnl/Year
+	~		|
+
+"TB - DC vs IC/RC"(
+	[(-0.5,0)-(10,6)],(-0.5,0),(0,0),(0.5,0.5),(1,1),(1.5,1.5),(2,2),(2.5,2.5),(3,3),(3.5\
+		,3.5),(4,4),(4.5,4.5),(5,5),(5.5,5.4),(6,5.7),(6.5,5.9),(7,6),(7.5,6))
+	~	Dmnl
+	~		|
+
+"Time to Adjust Backlog (TAB)"=
+	1.5
+	~	Year
+	~		|
+
+"Time to Adjust Captial (TAC)"=
+	3
+	~	Year
+	~		|
+
+"Time to Adjust Supply Line (TASL)"=
+	3
+	~	Year
+	~	Baseline was 3
+	|
+
+"Time to Average Orders (TAO)"=
+	2
+	~	Year
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 160
+	~	Year
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Year
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Year [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0625
+	~	Year [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Arial|12||0-0-0|0-0-0|0-0-0|-1--1--1|-1--1--1|96,96,50,0
+10,1,"Production Capacity (PC)",1740,1209,53,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,2,"Capacity Utilization (CU)",1674,1075,55,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,3,"Backlog of Unfilled Orders (B)",1246,904,61,30,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,4,"Normal Delivery Delay (NDD)",1401,852,58,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,5,"Inidicated Production (IP)",1457,967,55,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,6,3,5,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1354,922)|
+1,7,4,5,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1441,893)|
+10,8,"TB - Capacity Utilization vs IP/PC",1871,1068,69,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,9,8,2,1,0,0,0,0,128,0,-1--1--1,,1|(1737,1018)|
+1,10,1,2,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1734,1142)|
+1,11,5,2,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1502,979)|
+10,12,"Capital Stock (C)",2080,728,40,20,3,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,13,14,12,4,0,0,22,0,0,0,-1--1--1,,1|(2003,730)|
+11,14,508,1960,730,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,15,"Capital Acquisitions (CA)",1960,756,65,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,16,48,2273,727,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,17,19,16,4,0,0,22,0,0,0,-1--1--1,,1|(2230,727)|
+1,18,19,12,100,0,0,22,0,0,0,-1--1--1,,1|(2152,727)|
+11,19,48,2191,727,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,20,"Capital Discards (CD)",2191,753,54,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,21,"Inital Capital Stock (C to)",2161,971,45,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,22,21,12,1,0,0,0,0,128,1,-1--1--1,,1|(2120,865)|
+10,23,"Capital / Output Ratio (COR)",2004,1301,57,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,24,23,1,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1828,1279)|
+1,25,12,1,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(2091,834)|
+10,26,"Average lifetime of capital (ALC)",2264,850,69,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,27,26,20,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(2205,825)|
+1,28,12,19,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(2114,695)|
+12,29,0,2352,768,77,27,8,7,0,0,-1,0,0,0,0,0,0,0,0,0
+Is first order discards ok? Equal prob of discard? Hmm
+10,30,"Capital Acquistion Time (CAT)",1732,946,67,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,31,"Supply Line of Unfilled Orders for Capital (SL)",1738,734,81,36,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,32,31,14,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1863,697)|
+1,33,30,15,1,0,45,0,2,64,0,-1--1--1,|12||0-0-0,1|(1956,851)|
+12,34,48,1433,738,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,35,37,31,4,0,0,22,0,0,0,-1--1--1,,1|(1609,739)|
+1,36,37,34,100,0,0,22,0,0,0,-1--1--1,,1|(1496,739)|
+11,37,48,1556,739,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,38,"Capital Orders (CO)",1556,765,54,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,39,"Inital Supply Line of Unfilled Orders for Capital (SL to)",1781,872,70,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,40,39,31,1,0,0,0,0,128,1,-1--1--1,,1|(1755,816)|
+1,41,14,31,100,0,0,22,0,0,0,-1--1--1,,1|(1886,730)|
+10,42,"Capital Order Fraction (COF)",1757,520,56,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,43,42,37,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1580,602)|
+1,44,12,37,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(1914,585)|
+10,45,"Indicated Capital Order Fraction (ICOF)",1812,414,80,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,46,"Correction to Orders from Captial Stock (CC)",1680,289,75,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,47,"Correction to Orders from Supply Line (CSL)",2007,390,75,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,48,46,45,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1751,386)|
+1,49,47,45,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1907,390)|
+1,50,19,45,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(2052,490)|
+1,51,12,45,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(2035,626)|
+10,52,"TB - COF vs ICOF",1645,435,46,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,53,52,42,1,0,0,0,0,128,0,-1--1--1,,1|(1718,493)|
+1,54,45,42,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1754,465)|
+10,55,"Desired Supply Line (DSL)",2170,301,57,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,56,"Time to Adjust Supply Line (TASL)",2187,452,71,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,57,55,47,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(2078,324)|
+1,58,56,47,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(2082,448)|
+10,59,"Perceived Capital Acquistion Time (PCAT)",2035,200,66,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,60,59,55,1,0,0,0,2,192,0,-1--1--1,|12||0-0-0,1|(2102,251)|
+10,61,"Desired Captial (DC)",1499,213,47,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,62,"Capital Stock (C)",1634,179,55,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,63,61,46,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1549,247)|
+1,64,62,46,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1680,240)|
+10,65,"Time to Adjust Captial (TAC)",1832,189,53,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,66,65,46,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1762,257)|
+10,67,"Reference Captial (RC)",1333,161,46,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,68,"Indicated Capital (IC)",1324,281,42,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,69,"Indicated Production Capacity (IPC)",1329,470,54,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,70,"Capital / Output Ratio (COR)",1184,222,61,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,71,70,68,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1214,282)|
+1,72,69,68,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1369,401)|
+10,73,"TB - DC vs IC/RC",1537,110,41,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,74,67,61,1,0,0,0,0,128,0,-1--1--1,,1|(1425,169)|
+1,75,73,61,1,0,0,0,0,128,0,-1--1--1,,1|(1528,146)|
+1,76,68,61,1,0,0,0,0,128,0,-1--1--1,,1|(1390,247)|
+10,77,"Expected Orders (EO)",1054,546,49,28,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+10,78,"Correction from Backlog (CB)",1205,598,57,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,79,78,69,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1241,524)|
+1,80,77,69,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1140,486)|
+10,81,"Indicated Backlog (IB)",1063,738,45,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,82,81,78,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1122,698)|
+1,83,3,78,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1206,769)|
+1,84,4,81,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1268,774)|
+1,85,77,81,1,0,0,0,0,64,0,-1--1--1,,1|(1035,640)|
+12,86,48,832,539,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,87,89,77,4,0,0,22,0,0,0,-1--1--1,,1|(967,539)|
+1,88,89,86,68,0,0,22,2,0,0,-1--1--1,|12||0-0-0,1|(879,539)|
+11,89,48,923,539,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,90,Change in Expected Orders,923,565,62,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,91,"Time to Average Orders (TAO)",854,440,61,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,92,91,89,1,0,45,0,2,128,0,-1--1--1,|12||0-0-0,1|(869,484)|
+10,93,"Initial Expected Orders (EO to)",1054,383,56,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,94,93,77,1,0,43,0,2,192,1,-1--1--1,|12||0-0-0,1|(1050,466)|
+1,95,77,89,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1003,481)|
+10,96,"Order Rate (OR)",851,789,59,10,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,97,96,90,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(854,713)|
+11,98,772,1578,1310,6,8,38,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,99,"Production Rate (PR)",1578,1336,40,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,100,2,99,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(1528,1189)|
+1,101,1,99,1,0,43,0,2,64,0,-1--1--1,|12||0-0-0,1|(1662,1321)|
+1,102,4,30,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1516,877)|
+10,103,"Time to Adjust Backlog (TAB)",1383,644,54,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,104,103,78,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1283,646)|
+10,105,"Production Rate (PR)",1163,111,45,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,106,105,67,1,0,0,0,0,128,0,-1--1--1,,1|(1283,106)|
+1,107,70,67,1,0,0,0,0,128,0,-1--1--1,,1|(1234,176)|
+12,108,0,2859,726,307,189,3,188,0,0,1,0,0,0,0,0,0,0,0,0
+Orders_and_Production
+12,109,0,2864,1101,307,180,3,188,0,0,2,0,0,0,0,0,0,0,0,0
+"Backlog of Unfilled Orders (B)",Graph
+10,110,"Delivery Delay (DD)",1441,1233,53,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,111,3,110,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1246,1107)|
+1,112,99,110,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1512,1289)|
+10,113,"Goods Sector Supply Line of Unfilled Orders (GSL)",1042,1248,82,35,3,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,114,113,3,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1023,1092)|
+1,115,31,3,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1518,893)|
+12,116,48,779,1250,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,117,119,113,4,0,0,22,0,0,0,-1--1--1,,1|(920,1250)|
+1,118,119,116,100,0,0,22,0,0,0,-1--1--1,,1|(828,1250)|
+11,119,48,874,1250,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,120,"Goods Sector Capital Order Rate (GCO)",874,1285,69,27,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,121,Initial Goods Sector Supply Line,995,1423,69,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,122,121,113,1,0,43,0,2,192,1,-1--1--1,|12||0-0-0,1|(970,1325)|
+12,123,48,1362,1248,10,8,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,124,126,123,4,0,0,22,0,0,0,-1--1--1,,1|(1298,1248)|
+1,125,126,113,100,0,0,22,0,0,0,-1--1--1,,1|(1178,1248)|
+11,126,48,1238,1248,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,127,"Goods Sector Capital Acquisition Rate (GCA)",1238,1274,86,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,128,113,127,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1099,1330)|
+1,129,30,126,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1487,1130)|
+1,130,38,96,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1289,831)|
+1,131,119,96,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(762,1016)|
+10,132,SW for order pulse,682,1383,47,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,133,132,120,1,0,0,0,0,128,0,-1--1--1,,1|(762,1295)|
+10,134,"Goods Sector Fractional Increase In Capital Orders (GFICO)",873,1502,95,27,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,135,134,120,1,0,0,0,0,128,0,-1--1--1,,1|(801,1384)|
+10,136,"KSPR - Captial Sector Switch for Production",1836,1444,62,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,137,136,99,1,0,0,0,0,128,0,-1--1--1,,1|(1664,1427)|
+10,138,"Indicated Production Capacity (IPC)",1595,1517,74,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,139,138,99,1,0,0,0,0,128,0,-1--1--1,,1|(1552,1463)|
+10,140,"KSCA - Captial Sector Switch for Capital Aquistions",1917,647,83,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,141,140,14,1,0,0,0,0,128,0,-1--1--1,,1|(1971,675)|
+1,142,4,15,1,0,0,0,0,128,0,-1--1--1,,1|(1670,841)|
+1,143,31,47,1,0,45,0,2,192,0,-1--1--1,|12||0-0-0,1|(1899,562)|
+1,144,19,55,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(2291,475)|
+10,145,"Effect of Delivery Delay on Supply Line (KEDDSL)",2287,130,85,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,146,"Normal Capital Aquistion time (KNCAT)",2045,26,55,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,147,146,59,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(2015,104)|
+1,148,145,59,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(2135,136)|
+10,149,"TB - KEDDSL vs KTPCAT",2492,100,62,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+10,150,"Capital Acquistion Time (CAT)",2503,-28,59,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,151,150,145,1,0,0,0,0,128,0,-1--1--1,,1|(2342,52)|
+1,152,146,145,1,0,0,0,0,128,0,-1--1--1,,1|(2162,64)|
+1,153,149,145,1,0,0,0,0,128,0,-1--1--1,,1|(2409,117)|
+10,154,"KSDC - Captial Sector Switch for Desired Captial",1239,378,84,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,155,154,68,1,0,0,0,0,128,0,-1--1--1,,1|(1270,326)|
+10,156,"Exogenous Desired Capital (KXDC)",1488,369,73,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,157,156,68,1,0,0,0,0,128,0,-1--1--1,,1|(1383,325)|
+10,158,"Normal Delivery Delay (NDD)",1782,-47,63,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,159,158,146,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1863,-2)|
+10,160,"KSSO - Captial Sector Switch for Self Ordering",2325,1090,86,18,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,161,20,39,1,0,0,0,0,128,0,-1--1--1,,1|(2010,832)|
+1,162,30,39,1,0,0,0,0,128,0,-1--1--1,,1|(1755,917)|
+10,163,"Production Capacity (PC)",858,343,57,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,164,163,93,1,0,0,0,0,128,0,-1--1--1,,1|(953,369)|
+10,165,"Goods Sector Capital Order Rate (GCO)",2313,963,69,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,166,"KSSO - Captial Sector Switch for Self Ordering",962,912,79,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,167,166,96,1,0,0,0,0,128,0,-1--1--1,,1|(930,857)|
+1,168,160,21,1,0,0,0,0,128,0,-1--1--1,,1|(2239,1051)|
+1,169,165,21,1,0,0,0,0,128,0,-1--1--1,,1|(2227,974)|
+1,170,23,21,1,0,0,0,0,128,0,-1--1--1,,1|(2043,1248)|
+1,171,26,21,1,0,0,0,0,128,0,-1--1--1,,1|(2235,914)|
+1,172,166,3,1,0,0,0,0,128,0,-1--1--1,,1|(1077,900)|
+1,173,166,30,1,0,0,0,0,128,0,-1--1--1,,1|(1336,1056)|
+1,174,67,156,1,0,0,0,0,128,0,-1--1--1,,1|(1465,281)|
+10,175,"Goods Sector Capital Aquistion Time (GCAT)",1146,1477,83,28,8,131,0,0,0,0,0,0,0,0,0,0,0,0
+1,176,110,175,1,0,43,0,2,192,0,-1--1--1,|12||0-0-0,1|(1383,1326)|
+1,177,175,121,1,0,0,0,0,128,0,-1--1--1,,1|(1027,1465)|
+1,178,120,121,1,0,0,0,0,128,0,-1--1--1,,1|(898,1362)|
+10,179,"KSCA - Captial Sector Switch for Capital Aquistions",1162,1135,88,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,180,179,126,1,0,0,0,0,128,0,-1--1--1,,1|(1188,1202)|
+1,181,99,127,1,0,0,0,0,128,0,-1--1--1,,1|(1387,1345)|
+10,182,"Capital Acquisitions (CA)",1217,1379,69,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,183,182,127,1,0,0,0,0,128,0,-1--1--1,,1|(1247,1337)|
+10,184,Good Sector Reference Captial Orders,662,1165,67,27,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,185,184,119,1,0,0,0,0,128,0,-1--1--1,,1|(704,1190)|
+1,186,4,110,1,0,0,0,0,128,1,-1--1--1,,1|(1385,1041)|
+10,187,"Capital Stock (C)",1392,45,55,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,188,187,67,1,0,0,0,0,128,1,-1--1--1,,1|(1365,96)|
+10,189,Time of Step,708,1469,47,10,8,3,0,0,0,0,0,0,0,0,0,0,0,0
+1,190,189,120,1,0,0,0,0,128,0,-1--1--1,,1|(759,1359)|
+10,191,Time of Step,1440,506,56,10,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,192,"Goods Sector Fractional Increase In Capital Orders (GFICO)",1488,560,95,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+1,193,192,156,1,0,0,0,0,128,0,-1--1--1,,1|(1582,498)|
+1,194,191,156,1,0,0,0,0,128,0,-1--1--1,,1|(1504,486)|
+10,195,"KSSO - Captial Sector Switch for Self Ordering",2294,1315,79,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,196,"KSPR - Captial Sector Switch for Production",2293,1394,62,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,197,"KSDC - Captial Sector Switch for Desired Captial",2311,1472,89,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+10,198,"Goods Sector Fractional Increase In Capital Orders (GFICO)",2298,1565,95,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128,0,0,0,0,0,0
+12,199,0,2868,1455,307,170,3,188,0,0,1,0,0,0,0,0,0,0,0,0
+Capacity_and_Production
+///---\\\
+:GRAPH Orders_and_Production
+:TITLE Orders and Production
+:SCALE
+:VAR "Order Rate (OR)"
+:VAR "Expected Orders (EO)"
+:VAR "Production Rate (PR)"
+
+:GRAPH Capacity_and_Production
+:TITLE Capacity and Production
+:SCALE
+:VAR "Production Capacity (PC)"|Capacity
+:VAR "Production Rate (PR)"|Production
+:L<%^E!@
+1:Sterman_Economic_Wave_Goods_formulas.vdfx
+9:Sterman_Economic_Wave_Goods_formulas
+15:0,0,0,0,0,0
+19:50,0
+27:0,
+34:0,
+4:Time
+5:Capital Acquisitions (CA)
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:0
+41:0
+42:1
+72:0
+73:0
+76:0
+77:0
+78:0
+79:0
+80:0
+81:0
+24:0
+25:160
+26:160
+75:
+43:
