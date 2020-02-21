@@ -1,1 +1,1 @@
-Readme file to initialize the folder. 
+The files titled "Sterman Economic Long Wave with Goods Sector Formulas" are the 'final and complete' model that matches the one from the documentation in the Sterman paper. Other files are from versions of the model described in the text of the paper, but do not correspond to the model that geneated the figures.
